@@ -12,3 +12,8 @@
 canvas {
     margin: 35px;
 }
+
+.btn-wrapper {
+    margin: 10px;
+    display: inline-block;
+}

@@ -1,4 +1,17 @@
 $(document).ready(function() {
+    // print charts with current values
+    printCharts();
+    // catch click on send button
+    $('#send').on('click', function() {
+        // get new values
+        var new_values = getNewValues();
+        // send them to the api (and print charts) 
+        sendValues(new_values);
+    });
+});
+
+// function that prints charts with current values
+function printCharts() {
     // ajax call to get data
     $.ajax ({
         'url' : 'http://157.230.17.132:4007/sales',
@@ -16,10 +29,59 @@ $(document).ready(function() {
             printPieChart(salesman_sales);
         },
         'error' : function() {
-            console.log('Si è verificato un errore');
+            alert('Si è verificato un errore');
         }
     });
-});
+}
+
+// function that sends new values to the api
+function sendValues(object) {
+    $.ajax ({
+        'url' : 'http://157.230.17.132:4007/sales',
+        'method' : 'POST',
+        'data': JSON.stringify({
+            'salesman' : object.salesman,
+            'amount' : object.amount,
+            'date' :object.date
+        }),
+        'success' : function() {
+            // print charts with current values
+             printCharts();
+        },
+        'error' : function() {
+            alert('Si è verificato un errore');
+        }
+    });
+}
+
+// function that gets new values from inputs
+function  getNewValues() {
+    var new_salesman = $('#dealer').val();
+    var new_month = $('#month').val();
+    var new_date = '11/' + new_month + '/2017';
+    var new_amount = $('#amount').val();
+    // check if the selling amount is a number
+    if(isNaN(new_amount)) {
+        alert('error');
+    } else {
+        // reset input
+        $('#amount').empty();
+        // get first value from select
+        var first_month = $('#month option:first');
+        // set first value to month select
+        $('#month').val(first_month.val());
+        // get first value from select
+        var first_dealer = $('#dealer option:first');
+        // set first value to dealer select
+        $('#dealer').val(first_dealer.val());
+
+        return {
+            salesman : new_salesman,
+            amount : new_amount,
+            date : new_date
+        }
+    }
+}
 
 // function that gets monthly sales
 function getMonthlySales(array) {
