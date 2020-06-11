@@ -39,6 +39,8 @@ function sendValues(object) {
     $.ajax ({
         'url' : 'http://157.230.17.132:4007/sales',
         'method' : 'POST',
+        'dataType': "json",
+        'contentType': 'application/json',
         'data': JSON.stringify({
             'salesman' : object.salesman,
             'amount' : object.amount,
@@ -59,13 +61,14 @@ function  getNewValues() {
     var new_salesman = $('#dealer').val();
     var new_month = $('#month').val();
     var new_date = '11/' + new_month + '/2017';
-    var new_amount = $('#amount').val();
+    var new_amount = parseInt($('#amount').val());
     // check if the selling amount is a number
     if(isNaN(new_amount)) {
         alert('error');
+    // reset inputs and return values
     } else {
         // reset input
-        $('#amount').empty();
+        $('#amount').val('');
         // get first value from select
         var first_month = $('#month option:first');
         // set first value to month select
